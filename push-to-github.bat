@@ -1,45 +1,30 @@
 @echo off
 chcp 65001 >nul
-title Push to GitHub
+title Auto Push to GitHub
 echo ========================================================
-echo        ភ្ជាប់ និង Push កូដទៅកាន់ GitHub ដោយស្វ័យប្រវត្តិ
+echo        កំពុង Update និង Push កូដទៅ GitHub ដោយស្វ័យប្រវត្តិ
 echo ========================================================
 echo.
 cd /d "%~dp0"
 
-echo 1. ពិនិត្យមើល Git Repository...
-if not exist ".git" (
-    git init
-    git branch -M main
-)
-
-echo.
-echo 2. បញ្ចូលឯកសារ និង Commit កូដ...
+echo 1. កំពុងពិនិត្យ និង Stage ឯកសារដែលបានកែប្រែ...
 git add .
-git commit -m "update: HD Social Video Downloader source code" >nul 2>&1
+
+set /p MSG="បញ្ចូលសារ Commit (ចុច Enter យកសារស្វ័យប្រវត្តិ): "
+if "%MSG%"=="" set MSG=Update code changes
+
+echo 2. កំពុង Commit: "%MSG%"...
+git commit -m "%MSG%"
 
 echo.
-echo --------------------------------------------------------
-set /p REPO_URL="សូមបិទភ្ជាប់ (Paste) GitHub Repository URL របស់អ្នកនៅទីនេះ: "
-if "%REPO_URL%"=="" (
-    echo [ERROR] មិនបានបញ្ចូល Repository URL ទេ។
-    pause
-    exit /b
-)
-
-echo.
-echo 3. កំពុងកំណត់ Remote origin...
-git remote remove origin >nul 2>&1
-git remote add origin %REPO_URL%
-
-echo 4. កំពុង Push ឡើងទៅ GitHub branch main...
-git push -u origin main
+echo 3. កំពុង Push ឡើងទៅ GitHub...
+git push origin main
 
 echo.
 if %errorlevel% equ 0 (
-    echo [ជោគជ័យ] កូដត្រូវបាន Push ឡើងទៅកាន់ GitHub ដោយជោគជ័យ!
+    echo [ជោគជ័យ] កូដថ្មីត្រូវបាន Push ទៅ GitHub រួចរាល់ហើយ!
 ) else (
-    echo [បរាជ័យ] មានបញ្ហាក្នុងការ Push! សូមពិនិត្យមើលសិទ្ធិ ឬ Sign in គណនី GitHub របស់អ្នក។
+    echo [បរាជ័យ] មានបញ្ហាក្នុងការ Push! សូមពិនិត្យមើលការតភ្ជាប់ Internet។
 )
 
 echo.
